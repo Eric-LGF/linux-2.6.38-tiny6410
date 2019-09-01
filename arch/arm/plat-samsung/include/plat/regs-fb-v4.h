@@ -33,6 +33,7 @@
 #define VIDTCON0				(0x10)
 #define VIDTCON1				(0x14)
 #define VIDTCON2				(0x18)
+#define VIDTCON3				(0x1C)
 
 /* Window position controls */
 

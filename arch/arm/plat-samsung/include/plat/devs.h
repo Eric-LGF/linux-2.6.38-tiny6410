@@ -130,6 +130,17 @@ extern struct platform_device s5pc100_device_spdif;
 
 extern struct platform_device samsung_device_keypad;
 
+extern struct platform_device s3c_device_g2d;
+extern struct platform_device s3c_device_g3d;
+extern struct platform_device s3c_device_vpp;
+extern struct platform_device s3c_device_tvenc;
+extern struct platform_device s3c_device_tvscaler;
+extern struct platform_device s3c_device_rotator;
+extern struct platform_device s3c_device_jpeg;
+extern struct platform_device s3c_device_fimc0;
+extern struct platform_device s3c_device_fimc1;
+extern struct platform_device s3c_device_mfc;
+
 extern struct platform_device s5p_device_fimc0;
 extern struct platform_device s5p_device_fimc1;
 extern struct platform_device s5p_device_fimc2;

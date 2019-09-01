@@ -60,6 +60,15 @@ obj-$(CONFIG_SAMSUNG_DEV_IDE)	+= dev-ide.o
 obj-$(CONFIG_SAMSUNG_DEV_TS)	+= dev-ts.o
 obj-$(CONFIG_SAMSUNG_DEV_KEYPAD)	+= dev-keypad.o
 
+ifdef CONFIG_VIDEO_SAMSUNG
+obj-y				+= bootmem.o
+obj-y				+= dev-video.o
+endif
+obj-$(CONFIG_S3C64XX_DEV_FIMC0)	+= dev-fimc0.o
+obj-$(CONFIG_S3C64XX_DEV_FIMC1)	+= dev-fimc1.o
+obj-$(CONFIG_S3C64XX_SETUP_FIMC0)	+= setup-fimc0.o
+obj-$(CONFIG_S3C64XX_SETUP_FIMC1)	+= setup-fimc1.o
+
 # DMA support
 
 obj-$(CONFIG_S3C_DMA)		+= dma.o

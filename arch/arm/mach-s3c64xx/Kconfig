@@ -105,13 +105,38 @@ config MACH_MINI6410
 	select S3C_DEV_HSMMC1
 	select S3C64XX_SETUP_SDHCI
 	select S3C_DEV_USB_HOST
-	select S3C_DEV_NAND
 	select S3C_DEV_FB
+	select S3C_DEV_USB_HSOTG
+	select S3C_DEV_WDT
+	select S3C_DEV_RTC
+	select HAVE_S3C2410_WATCHDOG
 	select S3C64XX_SETUP_FB_24BPP
 	select SAMSUNG_DEV_ADC
-	select SAMSUNG_DEV_TS
+	select S3C64XX_DEV_FIMC0 if VIDEO_SAMSUNG
+	select S3C64XX_DEV_FIMC1 if VIDEO_SAMSUNG
+	select WIRELESS_EXT
+	select WEXT_SPY
+	select WEXT_PRIV
+	select AVERAGE
 	help
-	  Machine support for the FriendlyARM MINI6410
+	  Machine support for the FriendlyARM Mini6410
+
+menu "MINI6410 MMC/SD slot setup"
+	depends on MACH_MINI6410
+
+config MINI6410_SD_CH0
+	bool "Use channel 0 (removable)"
+	depends on MACH_MINI6410
+	help
+	  Say Y to enable MMC/SD slot 0 for USB storage, Camera, Wi-Fi etc.
+
+config MINI6410_SD_CH1
+	bool "Use channel 1 (on-board)"
+	depends on MACH_MINI6410
+	help
+	  Say Y to enable the NONREMOVABLE slot for SDIO Wi-Fi.
+
+endmenu
 
 config MACH_REAL6410
 	bool "REAL6410"

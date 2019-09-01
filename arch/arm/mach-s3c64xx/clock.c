@@ -94,6 +94,30 @@ struct clk clk_xusbxti = {
 	.rate		= 48000000,
 };
 
+#ifdef CONFIG_VIDEO_SAMSUNG
+static int s3c64xx_setrate_sclk_cam(struct clk *clk, unsigned long rate)
+{
+	u32 shift = 20;
+	u32 cam_div, cfg;
+	unsigned long src_clk = clk_get_rate(clk->parent);
+
+	cam_div = src_clk / rate;
+
+	if (cam_div > 32)
+		cam_div = 32;
+
+	cfg = __raw_readl(S3C_CLK_DIV0);
+	cfg &= ~(0xf << shift);
+	cfg |= ((cam_div - 1) << shift);
+	__raw_writel(cfg, S3C_CLK_DIV0);
+
+	printk("parent clock for camera: %ld.%03ld MHz, divisor: %d\n", \
+			print_mhz(src_clk), cam_div);
+
+	return 0;
+}
+#endif
+
 static int inline s3c64xx_gate(void __iomem *reg,
 				struct clk *clk,
 				int enable)
@@ -328,7 +352,58 @@ static struct clk init_clocks[] = {
 		.parent		= &clk_h,
 		.enable		= s3c64xx_hclk_ctrl,
 		.ctrlbit	= S3C_CLKCON_HCLK_IHOST,
-	}
+	},
+#ifdef CONFIG_VIDEO_SAMSUNG
+	{
+		.name		= "fimc",
+		.id		= -1,
+		.parent		= &clk_h,
+		.ctrlbit	= S3C_CLKCON_HCLK_CAMIF,
+	}, {
+		.name		= "hclk_mfc",
+		.id		= -1,
+		.parent		= &clk_h,
+		.enable		= s3c64xx_hclk_ctrl,
+		.ctrlbit	= S3C_CLKCON_HCLK_MFC,
+	}, {
+		.name		= "sclk_mfc",
+		.id		= -1,
+		.parent		= &clk_h2,
+		.enable		= s3c64xx_sclk_ctrl,
+		.ctrlbit	= S3C_CLKCON_SCLK_MFC,
+		.usage		= 0,
+		.rate		= 48*1000*1000,
+	}, {
+		.name		= "pclk_mfc",
+		.id		= -1,
+		.parent		= &clk_p,
+		.enable		= s3c64xx_pclk_ctrl,
+		.ctrlbit	= S3C_CLKCON_PCLK_MFC,
+	}, {
+		.name		= "hclk_jpeg",
+		.id		= -1,
+		.parent		= &clk_h,
+		.enable		= s3c64xx_hclk_ctrl,
+		.ctrlbit	= S3C_CLKCON_HCLK_JPEG,
+	}, {
+		.name		= "sclk_jpeg",
+		.id		= -1,
+		.parent		= &clk_h2,
+		.enable		= s3c64xx_sclk_ctrl,
+		.ctrlbit	= S3C_CLKCON_SCLK_JPEG,
+		.usage		= 0,
+		.rate		= 48*1000*1000,
+	}, {
+		.name		= "sclk_cam",
+		.id		= -1,
+		.parent		= &clk_h2,
+		.enable		= s3c64xx_sclk_ctrl,
+		.ctrlbit	= S3C_CLKCON_SCLK_CAM,
+		.ops        = &(struct clk_ops) {
+			.set_rate	= s3c64xx_setrate_sclk_cam,
+		},
+	},
+#endif
 };
 
 
@@ -780,7 +855,14 @@ void __init_or_cpufreq s3c6400_setup_clocks(void)
 	printk(KERN_INFO "S3C64XX: PLL settings, A=%ld, M=%ld, E=%ld\n",
 	       apll, mpll, epll);
 
-	hclk2 = mpll / GET_DIV(clkdiv0, S3C6400_CLKDIV0_HCLK2);
+	if(__raw_readl(S3C64XX_OTHERS) & S3C64XX_OTHERS_SYNCMUXSEL_SYNC) {
+		/* Synchronous mode */
+		hclk2 = apll / GET_DIV(clkdiv0, S3C6400_CLKDIV0_HCLK2);
+	} else {
+		/* Asynchronous mode */
+		hclk2 = mpll / GET_DIV(clkdiv0, S3C6400_CLKDIV0_HCLK2);
+	}
+
 	hclk = hclk2 / GET_DIV(clkdiv0, S3C6400_CLKDIV0_HCLK);
 	pclk = hclk2 / GET_DIV(clkdiv0, S3C6400_CLKDIV0_PCLK);
 
