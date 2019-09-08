@@ -28,6 +28,7 @@
 struct dm9000_plat_data {
 	unsigned int	flags;
 	unsigned char	dev_addr[6];
+	unsigned char	param_addr[6];
 
 	/* allow replacement IO routines */
 

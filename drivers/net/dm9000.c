@@ -1580,17 +1580,22 @@ dm9000_probe(struct platform_device *pdev)
 	for (i = 0; i < 6; i += 2)
 		dm9000_read_eeprom(db, i / 2, ndev->dev_addr+i);
 
+	/* try MAC address passed by kernel command line */
 	if (!is_valid_ether_addr(ndev->dev_addr) && pdata != NULL) {
-		mac_src = "platform data";
-		memcpy(ndev->dev_addr, pdata->dev_addr, 6);
+		mac_src = "param data";
+		memcpy(ndev->dev_addr, pdata->param_addr, 6);
 	}
 
 	if (!is_valid_ether_addr(ndev->dev_addr)) {
 		/* try reading from mac */
-		
 		mac_src = "chip";
 		for (i = 0; i < 6; i++)
 			ndev->dev_addr[i] = ior(db, i+DM9000_PAR);
+	}
+
+	if (!is_valid_ether_addr(ndev->dev_addr) && pdata != NULL) {
+		mac_src = "platform data";
+		memcpy(ndev->dev_addr, pdata->dev_addr, 6);
 	}
 
 	if (!is_valid_ether_addr(ndev->dev_addr))
