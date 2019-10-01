@@ -190,6 +190,35 @@ config TOUCHSCREEN_S3C2410
 	  To compile this driver as a module, choose M here: the
 	  module will be called s3c2410_ts.
 
+config TOUCHSCREEN_MINI6410
+	tristate "S3C touchscreen driver for Mini6410"
+	depends on ARCH_S3C2410 || ARCH_S3C64XX || ARCH_S5P64XX || ARCH_S5PC1XX
+	default y
+	help
+	  Say Y here to enable the driver for the touchscreen on the
+	  FriendlyARM Mini6410 development board.
+
+	  If unsure, say N.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called mini6410-ts.
+
+config TOUCHSCREEN_1WIRE
+	tristate "Mini6410 1-Wire host and Touch Screen Driver"
+	depends on MACH_MINI6410
+	help
+	  Say Y here to enable the 1-Wire host and Touch Screen driver for
+	  FriendlyARM Mini6410 development board.
+
+	  If unsure, say N.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called mini6410_1wire_host.
+
+config TOUCHSCREEN_IF
+	bool
+	default y if TOUCHSCREEN_1WIRE
+
 config TOUCHSCREEN_GUNZE
 	tristate "Gunze AHL-51S touchscreen"
 	select SERIO

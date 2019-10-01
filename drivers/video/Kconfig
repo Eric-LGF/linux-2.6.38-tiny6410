@@ -2065,6 +2065,15 @@ config FB_S3C_DEBUG_REGWRITE
        ---help---
          Show all register writes via printk(KERN_DEBUG)
 
+source "drivers/video/samsung/Kconfig"
+
+config BACKLIGHT_FRIENDLY_ARM
+	tristate "Backlight support for FriendlyARM board"
+	depends on FB && ARCH_S3C64XX
+	default y
+	help
+	  backlight driver for FriendlyARM board
+
 config FB_S3C2410
 	tristate "S3C2410 LCD framebuffer support"
 	depends on FB && ARCH_S3C2410
