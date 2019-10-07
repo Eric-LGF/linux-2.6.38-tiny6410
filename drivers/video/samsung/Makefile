@@ -12,6 +12,7 @@ obj-$(CONFIG_FB_S3C_EXT_TFT480272)		+= s3c_mini6410.o
 obj-$(CONFIG_FB_S3C_EXT_HSD480272)		+= s3c_mini6410.o
 obj-$(CONFIG_FB_S3C_EXT_TFT800480)		+= s3c_mini6410.o
 obj-$(CONFIG_FB_S3C_EXT_S70T800480)		+= s3c_mini6410.o
+obj-$(CONFIG_FB_S3C_EXT_S70D)			+= s3c_mini6410.o
 obj-$(CONFIG_FB_S3C_EXT_W50I800480)		+= s3c_mini6410.o
 obj-$(CONFIG_FB_S3C_EXT_W101)			+= s3c_mini6410.o
 obj-$(CONFIG_FB_S3C_EXT_T240320)		+= s3c_mini6410.o

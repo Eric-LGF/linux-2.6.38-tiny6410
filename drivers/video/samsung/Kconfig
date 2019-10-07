@@ -44,6 +44,12 @@ config FB_S3C_EXT_S70T800480
 		help
 		  7 inch 800x480 TFT LCD
 
+config FB_S3C_EXT_S70D
+		boolean "7 inch 800x480 TFT LCD - S70D"
+		select TOUCHSCREEN_IF
+		help
+		  7 inch 800x480 TFT LCD
+
 config FB_S3C_EXT_W50I800480
 		boolean "5 inch 800x480 TFT LCD - W50i"
 		select TOUCHSCREEN_IF

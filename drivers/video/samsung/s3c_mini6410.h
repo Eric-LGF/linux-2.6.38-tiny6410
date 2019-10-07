@@ -97,6 +97,23 @@
 #define S3CFB_VIDCON1	(S3C_VIDCON1_IHSYNC_INVERT | S3C_VIDCON1_IVSYNC_INVERT)
 
 //------------------------------------------------------------------------------
+#elif defined(CONFIG_FB_S3C_EXT_S70D)
+
+#define S3CFB_LCD_TYPE	"S70D"
+#define S3CFB_VBP		(24)	/* back porch */
+#define S3CFB_VFP		(22)	/* front porch */
+#define S3CFB_VSW		(8)	    /* vsync width */
+#define S3CFB_HBP		(78)	/* back porch */
+#define S3CFB_HFP		(80)	/* front porch */
+#define S3CFB_HSW		(10)	/* hsync width */
+
+#define S3CFB_HRES		800		/* horizon pixel  x resolition */
+#define S3CFB_VRES		480		/* line cnt       y resolution */
+
+#define S3CFB_CLKVAL		3	/* ~33.25 MHz */
+#define S3CFB_VIDCON1	(S3C_VIDCON1_IHSYNC_INVERT | S3C_VIDCON1_IVSYNC_INVERT)
+
+//------------------------------------------------------------------------------
 #elif defined(CONFIG_FB_S3C_EXT_W50I800480)
 
 #define S3CFB_LCD_TYPE	"W50i"
