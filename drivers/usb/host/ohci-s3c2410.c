@@ -25,10 +25,14 @@
 
 #define valid_port(idx) ((idx) == 1 || (idx) == 2)
 
+#ifdef CONFIG_MACH_MINI6410
+extern void s3c_otg_phy_config(int enable);
+#endif
+
 /* clock device associated with the hcd */
 
 static struct clk *clk;
-static struct clk *usb_clk;
+static struct clk *otg_clk, *usb_clk;
 
 /* forward definitions */
 
@@ -46,6 +50,11 @@ static void s3c2410_start_hc(struct platform_device *dev, struct usb_hcd *hcd)
 	struct s3c2410_hcd_info *info = dev->dev.platform_data;
 
 	dev_dbg(&dev->dev, "s3c2410_start_hc:\n");
+
+	clk_enable(otg_clk);
+#ifdef CONFIG_MACH_MINI6410
+	s3c_otg_phy_config(1);
+#endif
 
 	clk_enable(usb_clk);
 	mdelay(2);			/* let the bus clock stabilise */
@@ -79,6 +88,7 @@ static void s3c2410_stop_hc(struct platform_device *dev)
 
 	clk_disable(clk);
 	clk_disable(usb_clk);
+	clk_disable(otg_clk);
 }
 
 /* ohci_s3c2410_hub_status_data
@@ -375,6 +385,13 @@ static int usb_hcd_s3c2410_probe (const struct hc_driver *driver,
 		goto err_clk;
 	}
 
+	otg_clk = clk_get(&dev->dev, "otg");
+	if (IS_ERR(otg_clk)) {
+		dev_err(&dev->dev, "cannot get otg clock\n");
+		retval = -ENOENT;
+		goto err_otg;
+	}
+
 	s3c2410_start_hc(dev, hcd);
 
 	hcd->regs = ioremap(hcd->rsrc_start, hcd->rsrc_len);
@@ -395,6 +412,10 @@ static int usb_hcd_s3c2410_probe (const struct hc_driver *driver,
  err_ioremap:
 	s3c2410_stop_hc(dev);
 	iounmap(hcd->regs);
+
+	clk_put(otg_clk);
+
+ err_otg:
 	clk_put(usb_clk);
 
  err_clk:

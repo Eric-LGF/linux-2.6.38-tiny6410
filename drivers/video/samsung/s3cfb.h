@@ -27,7 +27,7 @@ extern int s5pc100_timer_setup (int channel, int usec, unsigned long g_tcnt, uns
 /*
  *  Debug macros
  */
-#define DEBUG 1
+#define DEBUG 0
 
 #if DEBUG
 #define DPRINTK(fmt, args...)	printk("%s: " fmt, __FUNCTION__ , ## args)
