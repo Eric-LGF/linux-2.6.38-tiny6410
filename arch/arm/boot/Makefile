@@ -70,7 +70,7 @@ else
 $(obj)/uImage: LOADADDR=$(ZRELADDR)
 endif
 
-$(obj)/uImage: STARTADDR=$(LOADADDR)
+$(obj)/uImage: STARTADDR=$(shell echo $(LOADADDR) | sed -e "s/..$$/40/")
 
 $(obj)/uImage:	$(obj)/zImage FORCE
 	$(call if_changed,uimage)
